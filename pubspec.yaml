@@ -41,8 +41,13 @@ dependencies:
   path_provider: ^2.1.1
   connectivity_plus: ^6.1.4
   http: ^1.4.0
+  shimmer: ^3.0.0
+  dio: ^5.8.0+1
+  flutter_image_compress: ^2.1.0
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.4
   flutter_test:
     sdk: flutter
 
@@ -52,6 +57,23 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/image/app_logo.png"
+  adaptive_icon_background: "#FC531E"
+  adaptive_icon_foreground: "assets/image/adaptive_icon.png"
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/image/splash_screen.png
+  android: true
+  ios: true
+  web: false
+  android_gravity: center
+  ios_content_mode: center
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -65,7 +87,10 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/image/app_logo.png
+    - assets/image/adaptive_icon.png
+    - assets/image/splash_screen.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
