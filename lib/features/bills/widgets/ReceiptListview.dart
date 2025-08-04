@@ -39,7 +39,7 @@ class ReceiptListview extends StatelessWidget{
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SecureImage(url: getReceiptItem.imageUrl, radius: 10, height: screenWidth/3.5, width: screenWidth/3.5, getBoxFit: BoxFit.cover),
             SizedBox(width: screenWidth/25,),
