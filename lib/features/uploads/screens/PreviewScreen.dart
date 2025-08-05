@@ -4,25 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scanner/core/constants/colors.dart';
 import 'package:scanner/core/utils/compress_image.dart';
+import 'package:scanner/core/utils/date_format_change.dart';
 import 'package:scanner/core/widgets/circular_progress_indicator_widget.dart';
-import 'package:scanner/features/bills/bloc/bills_bloc.dart';
-import 'package:scanner/features/bills/bloc/bills_event.dart';
-import 'package:scanner/features/bills/bloc/bills_state.dart';
+import 'package:scanner/features/bills/bloc/bill_detail_bloc.dart';
+import 'package:scanner/features/bills/bloc/bill_detail_event.dart';
+import 'package:scanner/features/bills/bloc/bill_detail_state.dart';
 import 'package:scanner/features/bills/models/bill_model.dart';
-import '../../bills/screens/EditReceiptScreen.dart';
+import 'package:scanner/features/bills/screens/EditReceiptScreen.dart';
 
 class PreviewScreen extends StatelessWidget {
   final String imagePath;
   const PreviewScreen({super.key, required this.imagePath});
 
   navigateToEditReceiptScreen({required BuildContext getContext, required Bill getReceiptItem,}) {
-    Navigator.push(getContext, MaterialPageRoute(builder: (_) => EditReceiptScreen(getReceiptItem: getReceiptItem),),).then((val) {
+    Navigator.push(getContext, MaterialPageRoute(builder: (_) => EditReceiptScreen(getReceiptItem: getReceiptItem,isUpdate: false,),),).then((val) {
       Navigator.pop(getContext, val);
     });
   }
 
   callUploadImageAPI({required BuildContext getContext, required String base64data,}) {
-    getContext.read<BillBloc>().add(UploadImageEvent(base64data));
+    getContext.read<BillDetailBloc>().add(UploadImageEvent(base64data));
   }
 
   Future<void> onContinuePressed({required BuildContext getContext}) async {
@@ -42,17 +43,17 @@ class PreviewScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.pageBackground,
       appBar: AppBar(title: Text('Preview')),
-      body: BlocListener<BillBloc, BillState>(
+      body: BlocListener<BillDetailBloc, BillDetailState>(
         listener: (context, state) {
           if (state is ImageUploadSuccess) {
             final res = state.response;
             print("Response success : $res");
             final receipt = res['receipt'] ?? {};
             final imageUrl = res['url'] ?? '';
-            Bill getReceiptItem = Bill(merchant: receipt['merchant'] ?? '', total: (receipt['total'] ?? 0).toDouble(), date: receipt['date'] ?? '', category: receipt['category'] ?? '', items: List<String>.from(receipt['items'] ?? []), imageUrl: imageUrl,);
+            Bill getReceiptItem = Bill(merchant: receipt['merchant'] ?? '', total: (receipt['total'] ?? 0).toDouble(), date: receipt['date']??"", category: receipt['category'] ?? '', items: List<String>.from(receipt['items'] ?? []), imageUrl: imageUrl,);
             navigateToEditReceiptScreen(getContext: context, getReceiptItem: getReceiptItem,);
           }
-          if (state is BillError) {
+          if (state is BillDetailError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)),);
           }
         },
@@ -70,9 +71,9 @@ class PreviewScreen extends StatelessWidget {
             Expanded(child: OutlinedButton(onPressed: () {Navigator.pop(context, "retake");}, child: Text('Retake'),),),
             SizedBox(width: 30),
             Expanded(
-              child: BlocBuilder<BillBloc, BillState>(
+              child: BlocBuilder<BillDetailBloc, BillDetailState>(
                 builder: (context, state) {
-                  final isLoading = state is BillLoading;
+                  final isLoading = state is BillDetailLoading;
                   return ElevatedButton(
                     onPressed: () {
                       if(!isLoading){

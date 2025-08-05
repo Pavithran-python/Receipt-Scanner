@@ -54,6 +54,7 @@ class BillApiService {
     if(await CheckInternetConnectionMethod()){
       try {
         final response = await _dio.put('/bills/$id', data: updates);
+        print("Update bill response : ${response}");
         return Bill.fromJson(response.data);
       } on DioException catch (e) {
         _handleDioError(e);

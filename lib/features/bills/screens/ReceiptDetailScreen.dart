@@ -1,134 +1,211 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scanner/core/constants/colors.dart';
-import 'package:scanner/core/utils/convert_base64.dart';
+import 'package:scanner/core/utils/date_format_change.dart';
+import 'package:scanner/core/widgets/Loader/receipt_detail_loader_screen.dart';
 import 'package:scanner/core/widgets/circular_progress_indicator_widget.dart';
 import 'package:scanner/core/widgets/secure_image.dart';
-import 'package:scanner/features/bills/bloc/bills_bloc.dart';
-import 'package:scanner/features/bills/bloc/bills_event.dart';
-import 'package:scanner/features/bills/bloc/bills_state.dart';
+import 'package:scanner/features/bill_list/bloc/bill_list_bloc.dart';
+import 'package:scanner/features/bill_list/bloc/bill_list_event.dart';
+import 'package:scanner/features/bills/bloc/bill_detail_bloc.dart';
+import 'package:scanner/features/bills/bloc/bill_detail_event.dart';
+import 'package:scanner/features/bills/bloc/bill_detail_state.dart';
 import 'package:scanner/features/bills/models/bill_model.dart';
+import 'EditReceiptScreen.dart';
 
-class ReceiptDetailScreen extends StatelessWidget{
-  const ReceiptDetailScreen({super.key,required this.getReceiptItem});
-  final Bill getReceiptItem;
+class ReceiptDetailScreen extends StatefulWidget {
+  final String billId;
+  const ReceiptDetailScreen({super.key, required this.billId});
 
-  callDeleteButton({required BuildContext context}){
-    context.read<BillBloc>().add(DeleteBill(getReceiptItem.id!));
+  @override
+  State<ReceiptDetailScreen> createState() => _ReceiptDetailScreenState();
+}
 
+class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
+  Bill? _cachedBill;
+
+  navigateToEditReceiptScreen({required BuildContext getContext, required Bill getReceiptItem,}) {
+    Navigator.push(getContext, MaterialPageRoute(builder: (_) => EditReceiptScreen(getReceiptItem: getReceiptItem,isUpdate: true,),),).then((val) {
+      print("val : ${val}");
+      if(val!=null && val){
+        getBillApi();
+      }
+    });
   }
+
+  getBillApi(){
+    context.read<BillDetailBloc>().add(GetBill(widget.billId));
+  }
+
+  callDeleteButton(String id) {
+    context.read<BillDetailBloc>().add(DeleteBill(id));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getBillApi();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.pageBackground,
       appBar: AppBar(title: Text('Receipt Detail')),
-      body: BlocListener<BillBloc, BillState>(
-        listener: (context,state){
-          if(state is DeleteBillSuccess){
-            Navigator.pop(context,"delete");
+      body: BlocConsumer<BillDetailBloc, BillDetailState>(
+        listener: (context, state) {
+          if (state is DeleteBillSuccess) {
+            context.read<BillListBloc>().add(DeleteBillToListEvent(widget.billId));
             final res = state.deleteResponse;
-            String getMessage = res["message"]??"Receipt Deleted Successfully";
+            String getMessage = res["message"] ?? "Receipt Deleted Successfully";
+            Navigator.pop(context, "delete");
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(getMessage)),);
-          }
-          if (state is BillError) {
+          } else if (state is BillDetailError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)),);
           }
         },
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SecureImage(url: getReceiptItem.imageUrl, radius: 0, height: null, width: screenWidth, getBoxFit: BoxFit.fitHeight),
-              SizedBox(height: 20,),
-              Container(
-                width: screenWidth,
-                padding: EdgeInsets.symmetric(horizontal: screenWidth/20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("Merchant",style: TextStyle(fontWeight: FontWeight.w500,),softWrap: true,),
-                        SizedBox(width: 20,),
-                        Flexible(child: Text(getReceiptItem.merchant,style: TextStyle(fontWeight: FontWeight.bold,),softWrap: true,),),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("Price",style: TextStyle(fontWeight: FontWeight.w500,),softWrap: true,),
-                        SizedBox(width: 20,),
-                        Flexible(child: Text(getReceiptItem.total.toString(),style: TextStyle(fontWeight: FontWeight.bold,),softWrap: true,),),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("Category",style: TextStyle(fontWeight: FontWeight.w500,),softWrap: true,),
-                        SizedBox(width: 20,),
-                        Flexible(child: Text(getReceiptItem.category,style: TextStyle(fontWeight: FontWeight.bold,),softWrap: true,),),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("Date",style: TextStyle(fontWeight: FontWeight.w500,),softWrap: true,),
-                        SizedBox(width: 20,),
-                        Flexible(child: Text(getReceiptItem.date,style: TextStyle(fontWeight: FontWeight.bold,),softWrap: true,),),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("Items",style: TextStyle(fontWeight: FontWeight.w500,),softWrap: true,),
-                        SizedBox(width: 20,),
-                        Flexible(child: Text(getReceiptItem.items.toString(),style: TextStyle(fontWeight: FontWeight.bold,),softWrap: true,),),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                  ],
-                ),
+        builder: (context, state) {
+          if (state is BillGetDetailLoading) {
+            return ReceiptDetailLoaderScreen();
+          }
+          if(state is BillOperationSuccess){
+            _cachedBill = state.bill;
+          }
+          if(_cachedBill!=null){
+            final bill = _cachedBill;
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: screenWidth,
+                    color: Colors.black,
+                    child: SecureImage(url: bill!.imageUrl, radius: 0, height: screenWidth, width: screenWidth, getBoxFit: BoxFit.fitHeight,),
+                  ),
+                  SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+                        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              blurStyle: BlurStyle.outer,
+                              color: Colors.grey.withOpacity(0.3),
+                              blurRadius: 7,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 20),
+                            Text("Product Details", style:TextStyle(fontWeight:FontWeight.bold),),
+                            SizedBox(height: 10),
+                            _buildInfoRow("Merchant", bill.merchant),
+                            SizedBox(height: 10),
+                            _buildInfoRow("Category", bill.category),
+                            SizedBox(height: 10),
+                            _buildInfoRow("Date", DateFormatChange().formatReadableDate(inputDate: bill.date)),
+                            SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+                        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              blurStyle: BlurStyle.outer,
+                              color: Colors.grey.withOpacity(0.3),
+                              blurRadius: 7,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text("Price Detail",style: TextStyle(fontWeight:FontWeight.bold),),
+                                InkWell(onTap: (){
+                                  navigateToEditReceiptScreen(getContext: context, getReceiptItem: bill,);
+                                },child: Icon(Icons.edit)),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            _buildInfoRow("Price", "₹ ${bill.total}"),
+                            bill.items.isEmpty?SizedBox():SizedBox(height: 10),
+                            bill.items.isEmpty?SizedBox():Text("Items", style: TextStyle(fontWeight: FontWeight.w500)),
+                            bill.items.isEmpty?SizedBox():SizedBox(height: 8),
+                            for (var item in bill.items)
+                              Row(
+                                children: [
+                                  Text("\u2022 ", style: TextStyle(fontSize: 18)),
+                                  Expanded(child: Text(item, style: TextStyle(fontWeight: FontWeight.bold)))
+                                ],
+                              ),
+                            SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            );
+          }
+          return Center(child:Text("Something went wrong"));
+        },
       ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical:10,horizontal: 16),
-        decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(blurStyle: BlurStyle.outer, color: Colors.grey.withOpacity(0.3), blurRadius: 7,),],),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurStyle: BlurStyle.outer,
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 7,
+            ),
+          ],
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(child: OutlinedButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),),
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel'),
+              ),
+            ),
             SizedBox(width: 30),
             Expanded(
-              child: BlocBuilder<BillBloc, BillState>(
+              child: BlocBuilder<BillDetailBloc, BillDetailState>(
                 builder: (context, state) {
-                  final isLoading = state is BillLoading;
+                  final isLoading = state is BillDeleteLoading;
                   return ElevatedButton(
-                    onPressed:  () {
+                    onPressed:  (){
                       if(!isLoading){
-                        callDeleteButton(context: context);
+                        callDeleteButton(widget.billId);
                       }
                     },
-                    child: isLoading ? CircularProgressIndicatorWidget() : const Text('Delete'),
+                    child: isLoading ? CircularProgressIndicatorWidget() : Text('Delete'),
                   );
                 },
               ),
@@ -136,6 +213,19 @@ class ReceiptDetailScreen extends StatelessWidget{
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
+        SizedBox(width: 20),
+        Flexible(
+          child: Text(value, style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+      ],
     );
   }
 

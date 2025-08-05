@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:scanner/core/utils/date_format_change.dart';
 import 'package:scanner/core/widgets/secure_image.dart';
 import 'package:scanner/features/bills/models/bill_model.dart';
 import 'package:scanner/features/bills/screens/ReceiptDetailScreen.dart';
@@ -10,7 +11,7 @@ class ReceiptListview extends StatelessWidget{
   final Bill getReceiptItem;
 
   navigateToReceiptDetailScreen({required BuildContext context}){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => ReceiptDetailScreen(getReceiptItem: getReceiptItem,)),).then((val){
+    Navigator.push(context, MaterialPageRoute(builder: (_) => ReceiptDetailScreen(billId: getReceiptItem.id!,)),).then((val){
     });
   }
 
@@ -20,8 +21,8 @@ class ReceiptListview extends StatelessWidget{
     double screenHeight = MediaQuery.of(context).size.height;
     return Container(
       width: screenWidth,
-      margin: EdgeInsets.symmetric(horizontal: screenWidth/25,vertical: screenHeight/75),
-      padding: EdgeInsets.symmetric(horizontal: screenWidth/30,vertical: screenHeight/60),
+      margin: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -41,18 +42,25 @@ class ReceiptListview extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SecureImage(url: getReceiptItem.imageUrl, radius: 10, height: screenWidth/3.5, width: screenWidth/3.5, getBoxFit: BoxFit.cover),
-            SizedBox(width: screenWidth/25,),
+            //SecureImage(url: getReceiptItem.imageUrl, radius: 10, height: screenWidth/3.5, width: screenWidth/3.5, getBoxFit: BoxFit.cover),
+            //SizedBox(width: screenWidth/25,),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Merchant : ${getReceiptItem.merchant}",style: TextStyle(fontWeight: FontWeight.bold,),softWrap: true,),
-                  Text("Price : ${getReceiptItem.total}",style: TextStyle(fontWeight: FontWeight.w600),softWrap: true,),
-                  Text("Category : ${getReceiptItem.category}",style: TextStyle(fontWeight: FontWeight.w500),softWrap: true,),
-                  Text("Date : ${getReceiptItem.date}",style: TextStyle(fontWeight: FontWeight.w500),softWrap: true,),
-                  Text("Items : ${getReceiptItem.items}",style: TextStyle(fontWeight: FontWeight.w500),softWrap: true,),
+                  Text(getReceiptItem.merchant,style: TextStyle(fontWeight: FontWeight.bold,),softWrap: true,),
+                  SizedBox(height: 4,),
+                  Text(getReceiptItem.category,style: TextStyle(fontWeight: FontWeight.w500),softWrap: true,),
+                  SizedBox(height: 4,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(DateFormatChange().formatReadableDate(inputDate: getReceiptItem.date),style: TextStyle(fontWeight: FontWeight.w500),softWrap: true,),
+                      Text("₹ ${getReceiptItem.total}",style: TextStyle(fontWeight: FontWeight.w600),softWrap: true,),
+                    ],
+                  ),
                 ],
               ),
             ),

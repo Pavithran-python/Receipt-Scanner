@@ -13,10 +13,7 @@ class CameraScreen extends StatelessWidget {
   navigateToPreviewScreen({required BuildContext getContext,required XFile image}){
     Navigator.push(getContext, MaterialPageRoute(builder: (_) => PreviewScreen(imagePath: image.path),),).then((val){
       print("$val");
-      if(val is Bill || val==null){
-        Navigator.pop(getContext,val);
-      }
-      else if(val == "retake"){
+      if(val!=null && val == "retake"){
 
       }
       else{

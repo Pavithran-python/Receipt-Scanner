@@ -17,7 +17,11 @@ class DashboardLoaderScreen extends StatelessWidget{
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 20,),
+          receiptLoader(),
+          receiptLoader(),
+          receiptLoader(),
+          receiptLoader(),
+          receiptLoader(),
           receiptLoader(),
           receiptLoader(),
           receiptLoader(),
@@ -31,8 +35,8 @@ class DashboardLoaderScreen extends StatelessWidget{
   Widget receiptLoader(){
     return Container(
       width: screenWidth,
-      margin: EdgeInsets.symmetric(horizontal: screenWidth/25,vertical: screenHeight/75),
-      child: LoaderWidget(loaderWidth: screenWidth, loaderHeight: screenWidth/3.5+screenHeight/60+screenHeight/60, radius: 10),
+      margin: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+      child: LoaderWidget(loaderWidth: screenWidth, loaderHeight: 100, radius: 10),
     );
   }
 
