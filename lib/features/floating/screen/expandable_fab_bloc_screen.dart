@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scanner/core/constants/constant.dart';
+import 'package:scanner/core/constants/sizes.dart';
 import 'package:scanner/features/floating/bloc/fab_bloc.dart';
 import 'package:scanner/features/floating/bloc/fab_event.dart';
 import 'package:scanner/features/floating/bloc/fab_state.dart';
@@ -7,7 +9,6 @@ import 'package:scanner/features/floating/bloc/fab_state.dart';
 class ExpandableFabBlocScreen extends StatelessWidget {
   final Function(int) getSelectedOption;
   const ExpandableFabBlocScreen({super.key,required this.getSelectedOption});
-
 
   @override
   Widget build(BuildContext context) {
@@ -21,33 +22,31 @@ class ExpandableFabBlocScreen extends StatelessWidget {
             children: [
               if (isExpanded) ...[
                 FloatingActionButton(
-                  heroTag: 'gallery',
+                  heroTag: galleryText,
                   onPressed: () {
-                    print("Gallery selected");
                     context.read<FabBloc>().add(CollapseFab());
                     getSelectedOption(0);
                   },
                   child: const Icon(Icons.photo_library),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: AppSizes.verticalPadding+AppSizes.verticalPadding,),
                 FloatingActionButton(
-                  heroTag: 'camera',
+                  heroTag: cameraText,
                   onPressed: () {
-                    print("Camera selected");
                     context.read<FabBloc>().add(CollapseFab());
                     getSelectedOption(1);
                   },
                   child: const Icon(Icons.camera_alt),
                 ),
-               SizedBox(height: 20,),
+                SizedBox(height: AppSizes.verticalPadding+AppSizes.verticalPadding,),
               ],
               FloatingActionButton(
-                heroTag: 'main',
+                heroTag: mainAddText,
                 onPressed: () {
                   context.read<FabBloc>().add(ToggleFab());
                 },
                 child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: AppSizes.animationSeconds),
                   child: Icon(
                     isExpanded ? Icons.close : Icons.add,
                     key: ValueKey<bool>(isExpanded),

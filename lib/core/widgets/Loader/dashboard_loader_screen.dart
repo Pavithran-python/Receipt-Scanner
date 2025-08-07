@@ -1,17 +1,14 @@
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:scanner/core/constants/sizes.dart';
 import 'package:scanner/core/widgets/Loader/loader_Widget.dart';
 
 class DashboardLoaderScreen extends StatelessWidget{
   DashboardLoaderScreen({super.key});
-  double screenWidth = 0;
-  double screenHeight = 0;
 
   @override
   Widget build(BuildContext context) {
-    screenWidth = MediaQuery.of(context).size.width;
-    screenHeight = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -34,9 +31,8 @@ class DashboardLoaderScreen extends StatelessWidget{
 
   Widget receiptLoader(){
     return Container(
-      width: screenWidth,
-      margin: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
-      child: LoaderWidget(loaderWidth: screenWidth, loaderHeight: 100, radius: 10),
+      margin: EdgeInsets.only(left: AppSizes.horizontalPadding,right: AppSizes.horizontalPadding,top: AppSizes.verticalPadding),
+      child: LoaderWidget(loaderWidth: double.infinity, loaderHeight: AppSizes.dashboardLoaderHeight, radius: AppSizes.radius),
     );
   }
 

@@ -1,0 +1,9 @@
+const String billJsonId = "_id";
+const String merchantJsonText = "merchant";
+const String totalJsonText = "total";
+const String dateJsonText = "date";
+const String categoryJsonText = "category";
+const String itemsJsonText = "items";
+const String imageUrlJsonText = "imageUrl";
+const String receiptJsonText = 'receipt';
+const String urlJsonText = 'url';

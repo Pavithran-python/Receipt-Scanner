@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:scanner/core/constants/colors.dart';
 import 'package:scanner/core/constants/sizes.dart';

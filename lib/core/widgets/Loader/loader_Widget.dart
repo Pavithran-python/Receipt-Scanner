@@ -1,17 +1,16 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:scanner/core/constants/colors.dart';
 import 'package:shimmer/shimmer.dart';
 
 Widget LoaderWidget({required double loaderWidth,required double loaderHeight,required double radius}){
   return Shimmer.fromColors(
-    baseColor: Colors.grey.withOpacity(0.5),
-    highlightColor: Colors.white,
+    baseColor: AppColors.loaderColor,
+    highlightColor: AppColors.background,
     child: Container(
       width: loaderWidth,
       height: loaderHeight,
       decoration: BoxDecoration(
-        color:Colors.grey.withOpacity(0.5),
+        color:AppColors.loaderColor,
         borderRadius: BorderRadius.all(Radius.circular(radius)),
       ),
     ),

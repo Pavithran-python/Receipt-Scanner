@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scanner/core/constants/colors.dart';
+import 'package:scanner/core/constants/constant.dart';
+import 'package:scanner/core/constants/sizes.dart';
 import 'package:scanner/core/utils/date_format_change.dart';
 import 'package:scanner/core/widgets/Loader/receipt_detail_loader_screen.dart';
 import 'package:scanner/core/widgets/circular_progress_indicator_widget.dart';
@@ -53,14 +55,14 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: AppColors.pageBackground,
-      appBar: AppBar(title: Text('Receipt Detail')),
+      appBar: AppBar(title: Text(receiptDetailAppBar)),
       body: BlocConsumer<BillDetailBloc, BillDetailState>(
         listener: (context, state) {
           if (state is DeleteBillSuccess) {
             context.read<BillListBloc>().add(DeleteBillToListEvent(widget.billId));
             final res = state.deleteResponse;
-            String getMessage = res["message"] ?? "Receipt Deleted Successfully";
-            Navigator.pop(context, "delete");
+            String getMessage = res[message] ?? receiptDeletedSuccessfully;
+            Navigator.pop(context, delete);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(getMessage)),);
           } else if (state is BillDetailError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)),);
@@ -81,86 +83,67 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
                 children: [
                   Container(
                     width: screenWidth,
-                    color: Colors.black,
+                    color: AppColors.black,
                     child: SecureImage(url: bill!.imageUrl, radius: 0, height: screenWidth, width: screenWidth, getBoxFit: BoxFit.fitHeight,),
                   ),
-                  SizedBox(height: 20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
-                        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+                        margin: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding,vertical: AppSizes.verticalPadding),
+                        padding: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding,vertical: AppSizes.verticalPadding),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              blurStyle: BlurStyle.outer,
-                              color: Colors.grey.withOpacity(0.3),
-                              blurRadius: 7,
-                            ),
-                          ],
+                          color: AppColors.cardBackgroundColor,
+                          borderRadius: BorderRadius.circular(AppSizes.radius),
+                          boxShadow: [BoxShadow(blurStyle: BlurStyle.outer, color: AppColors.boxShadowColor, blurRadius: AppSizes.shadowBlurRadius,),],
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 20),
-                            Text("Product Details", style:TextStyle(fontWeight:FontWeight.bold),),
-                            SizedBox(height: 10),
-                            _buildInfoRow("Merchant", bill.merchant),
-                            SizedBox(height: 10),
-                            _buildInfoRow("Category", bill.category),
-                            SizedBox(height: 10),
-                            _buildInfoRow("Date", DateFormatChange().formatReadableDate(inputDate: bill.date)),
-                            SizedBox(height: 20),
+                            Text(productDetailText, style:TextStyle(fontWeight:FontWeight.bold),),
+                            SizedBox(height: AppSizes.verticalPadding),
+                            _buildInfoRow(merchantText, bill.merchant),
+                            SizedBox(height: AppSizes.verticalPadding),
+                            _buildInfoRow(categoryText, bill.category),
+                            SizedBox(height: AppSizes.verticalPadding),
+                            _buildInfoRow(dateText, DateFormatChange().formatReadableDate(inputDate: bill.date)),
                           ],
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
-                        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+                        margin: EdgeInsets.only(left: AppSizes.horizontalPadding,right: AppSizes.horizontalPadding,bottom: AppSizes.verticalPadding),
+                        padding: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding,vertical: AppSizes.verticalPadding),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              blurStyle: BlurStyle.outer,
-                              color: Colors.grey.withOpacity(0.3),
-                              blurRadius: 7,
-                            ),
-                          ],
+                          color: AppColors.cardBackgroundColor,
+                          borderRadius: BorderRadius.circular(AppSizes.radius),
+                          boxShadow: [BoxShadow(blurStyle: BlurStyle.outer,color: AppColors.boxShadowColor, blurRadius: AppSizes.shadowBlurRadius,),],
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text("Price Detail",style: TextStyle(fontWeight:FontWeight.bold),),
-                                InkWell(onTap: (){
-                                  navigateToEditReceiptScreen(getContext: context, getReceiptItem: bill,);
-                                },child: Icon(Icons.edit)),
+                                Text(priceDetailText,style: TextStyle(fontWeight:FontWeight.bold),),
+                                InkWell(onTap: (){navigateToEditReceiptScreen(getContext: context, getReceiptItem: bill,);},child: Icon(Icons.edit)),
                               ],
                             ),
-                            SizedBox(height: 10),
-                            _buildInfoRow("Price", "₹ ${bill.total}"),
-                            bill.items.isEmpty?SizedBox():SizedBox(height: 10),
-                            bill.items.isEmpty?SizedBox():Text("Items", style: TextStyle(fontWeight: FontWeight.w500)),
-                            bill.items.isEmpty?SizedBox():SizedBox(height: 8),
+                            SizedBox(height: AppSizes.verticalPadding),
+                            _buildInfoRow(priceText, "$currency${bill.total}"),
+                            bill.items.isEmpty?SizedBox():SizedBox(height: AppSizes.verticalPadding),
+                            bill.items.isEmpty?SizedBox():Text(itemsText, style: TextStyle(fontWeight: FontWeight.w500)),
+                            bill.items.isEmpty?SizedBox():SizedBox(height: AppSizes.verticalPadding),
                             for (var item in bill.items)
                               Row(
                                 children: [
-                                  Text("\u2022 ", style: TextStyle(fontSize: 18)),
+                                  Text(bullet, style: TextStyle(fontSize: AppSizes.bulletFontSize)),
                                   Expanded(child: Text(item, style: TextStyle(fontWeight: FontWeight.bold)))
                                 ],
                               ),
-                            SizedBox(height: 20),
                           ],
                         ),
                       ),
@@ -170,20 +153,14 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
               ),
             );
           }
-          return Center(child:Text("Something went wrong"));
+          return Center(child:Text(somethingWentWrong));
         },
       ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding, vertical: AppSizes.verticalPadding),
         decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              blurStyle: BlurStyle.outer,
-              color: Colors.grey.withOpacity(0.3),
-              blurRadius: 7,
-            ),
-          ],
+          color: AppColors.cardBackgroundColor,
+          boxShadow: [BoxShadow(blurStyle: BlurStyle.outer, color: AppColors.boxShadowColor, blurRadius: AppSizes.shadowBlurRadius,),],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -191,10 +168,10 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
             Expanded(
               child: OutlinedButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text('Cancel'),
+                child: Text(cancelButtonText),
               ),
             ),
-            SizedBox(width: 30),
+            SizedBox(width: AppSizes.horizontalPadding),
             Expanded(
               child: BlocBuilder<BillDetailBloc, BillDetailState>(
                 builder: (context, state) {
@@ -205,7 +182,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
                         callDeleteButton(widget.billId);
                       }
                     },
-                    child: isLoading ? CircularProgressIndicatorWidget() : Text('Delete'),
+                    child: isLoading ? CircularProgressIndicatorWidget() : Text(deleteButtonText),
                   );
                 },
               ),
@@ -221,7 +198,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
-        SizedBox(width: 20),
+        SizedBox(width: AppSizes.horizontalPadding),
         Flexible(
           child: Text(value, style: TextStyle(fontWeight: FontWeight.bold)),
         ),

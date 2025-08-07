@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:scanner/core/constants/sizes.dart';
 import 'package:scanner/core/widgets/Loader/loader_Widget.dart';
 
 class SecureImage extends StatelessWidget {
@@ -19,7 +20,7 @@ class SecureImage extends StatelessWidget {
         errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image),
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
-          return LoaderWidget(loaderWidth: width??100, loaderHeight: height??width??100, radius: radius,);
+          return LoaderWidget(loaderWidth: width??AppSizes.loaderDefaultSize, loaderHeight: height??width??AppSizes.loaderDefaultSize, radius: radius,);
         },
       ),
     );

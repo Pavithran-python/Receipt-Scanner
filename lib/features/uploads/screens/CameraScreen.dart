@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanner/core/constants/colors.dart';
+import 'package:scanner/core/constants/constant.dart';
 import 'package:scanner/core/widgets/Loader/loader_Widget.dart';
-import 'package:scanner/features/bills/models/bill_model.dart';
-
 import 'PreviewScreen.dart';
 
 class CameraScreen extends StatelessWidget {
@@ -13,13 +12,27 @@ class CameraScreen extends StatelessWidget {
   navigateToPreviewScreen({required BuildContext getContext,required XFile image}){
     Navigator.push(getContext, MaterialPageRoute(builder: (_) => PreviewScreen(imagePath: image.path),),).then((val){
       print("$val");
-      if(val!=null && val == "retake"){
-
+      if(val!=null && val == retake){
       }
       else{
         Navigator.pop(getContext,val);
       }
     });
+  }
+
+  Future<CameraController?> _initCamera(BuildContext context) async {
+    final status = await Permission.camera.request();
+    if (status.isGranted) {
+      final cameras = await availableCameras();
+      final backCamera = cameras.firstWhere((cam) => cam.lensDirection == CameraLensDirection.back,);
+      final controller = CameraController(backCamera, ResolutionPreset.medium);
+      await controller.initialize();
+      return controller;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(cameraPermissionDenied)),);
+      Navigator.pop(context);
+      return null;
+    }
   }
 
   @override
@@ -31,14 +44,14 @@ class CameraScreen extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Scaffold(
-            appBar: AppBar(title: Text('Camera')),
+            appBar: AppBar(title: Text(cameraAppBarText)),
             body: LoaderWidget(loaderWidth: screenWidth, loaderHeight: screenHeight, radius: 0),
           );
         }
         final controller = snapshot.data as CameraController;
         return Scaffold(
           backgroundColor: AppColors.pageBackground,
-          appBar: AppBar(title: Text('Camera')),
+          appBar: AppBar(title: Text(cameraAppBarText)),
           body: Container(width: screenWidth,height:screenHeight,child: CameraPreview(controller),),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton(onPressed: ()async{
@@ -50,22 +63,5 @@ class CameraScreen extends StatelessWidget {
     );
   }
 
-  Future<CameraController?> _initCamera(BuildContext context) async {
-    final status = await Permission.camera.request();
-    if (status.isGranted) {
-      final cameras = await availableCameras();
-      final backCamera = cameras.firstWhere(
-            (cam) => cam.lensDirection == CameraLensDirection.back,
-      );
-      final controller = CameraController(backCamera, ResolutionPreset.medium);
-      await controller.initialize();
-      return controller;
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Camera permission denied')),
-      );
-      Navigator.pop(context);
-      return null;
-    }
-  }
+
 }

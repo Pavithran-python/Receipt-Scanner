@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scanner/core/constants/colors.dart';
+import 'package:scanner/core/constants/constant.dart';
+import 'package:scanner/core/constants/json_constant.dart';
+import 'package:scanner/core/constants/sizes.dart';
 import 'package:scanner/core/utils/compress_image.dart';
-import 'package:scanner/core/utils/date_format_change.dart';
 import 'package:scanner/core/widgets/circular_progress_indicator_widget.dart';
 import 'package:scanner/features/bills/bloc/bill_detail_bloc.dart';
 import 'package:scanner/features/bills/bloc/bill_detail_event.dart';
@@ -42,15 +44,14 @@ class PreviewScreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.pageBackground,
-      appBar: AppBar(title: Text('Preview')),
+      appBar: AppBar(title: Text(previewAppBarText)),
       body: BlocListener<BillDetailBloc, BillDetailState>(
         listener: (context, state) {
           if (state is ImageUploadSuccess) {
             final res = state.response;
-            print("Response success : $res");
-            final receipt = res['receipt'] ?? {};
-            final imageUrl = res['url'] ?? '';
-            Bill getReceiptItem = Bill(merchant: receipt['merchant'] ?? '', total: (receipt['total'] ?? 0).toDouble(), date: receipt['date']??"", category: receipt['category'] ?? '', items: List<String>.from(receipt['items'] ?? []), imageUrl: imageUrl,);
+            final receipt = res[receiptJsonText] ?? {};
+            final imageUrl = res[urlJsonText] ?? '';
+            Bill getReceiptItem = Bill(merchant: receipt[merchantJsonText] ?? '', total: (receipt[totalJsonText] ?? 0).toDouble(), date: receipt[dateJsonText]??"", category: receipt[categoryJsonText] ?? '', items: List<String>.from(receipt[itemsJsonText] ?? []), imageUrl: imageUrl,);
             navigateToEditReceiptScreen(getContext: context, getReceiptItem: getReceiptItem,);
           }
           if (state is BillDetailError) {
@@ -61,15 +62,15 @@ class PreviewScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [BoxShadow(blurStyle: BlurStyle.outer, color: Colors.grey.withOpacity(0.3), blurRadius: 7,),],
+          color: AppColors.cardBackgroundColor,
+          boxShadow: [BoxShadow(blurStyle: BlurStyle.outer, color: AppColors.boxShadowColor, blurRadius: AppSizes.shadowBlurRadius,),],
         ),
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding, vertical: AppSizes.verticalPadding),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(child: OutlinedButton(onPressed: () {Navigator.pop(context, "retake");}, child: Text('Retake'),),),
-            SizedBox(width: 30),
+            Expanded(child: OutlinedButton(onPressed: () {Navigator.pop(context, retake);}, child: Text(retakeText),),),
+            SizedBox(width: AppSizes.horizontalPadding),
             Expanded(
               child: BlocBuilder<BillDetailBloc, BillDetailState>(
                 builder: (context, state) {
@@ -80,7 +81,7 @@ class PreviewScreen extends StatelessWidget {
                         onContinuePressed(getContext: context);
                       }
                     },
-                    child: isLoading ? CircularProgressIndicatorWidget() : const Text('Continue'),
+                    child: isLoading ? CircularProgressIndicatorWidget() : const Text(continueText),
                   );
                 },
               ),

@@ -4,11 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scanner/core/services/bill_api_service.dart';
 import 'package:scanner/features/bill_list/bloc/bill_list_bloc.dart';
 import 'package:scanner/features/bill_list/bloc/bill_list_event.dart';
-import 'package:scanner/features/bills/models/bill_model.dart';
-import 'package:scanner/features/bills/screens/EditReceiptScreen.dart';
 import 'core/repositories/bill_repository.dart';
 import 'core/themes/app_theme.dart';
-import 'core/utils/date_format_change.dart';
 import 'features/bill_list/screens/DashboardScreen.dart';
 import 'features/bills/bloc/bill_detail_bloc.dart';
 
@@ -33,7 +30,6 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.appTheme,
-        //home: EditReceiptScreen(getReceiptItem: Bill(merchant: "", total: 0, date: "25/8/5", category: "", items: [], imageUrl: ""), isUpdate: false),
         home: DashboardScreen(),
       ),
     );

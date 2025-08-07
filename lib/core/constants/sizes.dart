@@ -1,6 +1,7 @@
 
 class AppSizes {
-  static const padding = 16.0;
+  static const horizontalPadding = 16.0;
+  static const verticalPadding = 16.0;
   static const radius = 8.0;
   static const avatarSize = 48.0;
   static const iconSize = 24.0;
@@ -25,4 +26,20 @@ class AppSizes {
   static const floatingButtonSize = 100.0;
   static const circularProgressWidth = 3.0;
   static const circularProgressHeight = 30.0;
+  static const imageQuality = 90;
+  static const imageQualityCheck = 10;
+  static const imageReduceQualityCheck = 10;
+  static const imageSize = 1024;
+  static const imageReduceSize = 500;
+  static const callingTimeoutSecond = 100;
+  static const dashboardLoaderHeight = 100.0;
+  static const shadowBlurRadius = 7.0;
+  static const loaderTitleTextWidth = 175.0;
+  static const loaderContentTextWidth = 100.0;
+  static const loaderTitleTextSize = 20.0;
+  static const loaderContentTextSize = 16.0;
+  static const loaderTextRadius = 10.0;
+  static const loaderDefaultSize = 100.0;
+  static const animationSeconds = 200;
+  static const bulletFontSize = 18.0;
 }

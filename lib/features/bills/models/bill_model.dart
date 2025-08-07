@@ -1,3 +1,5 @@
+import 'package:scanner/core/constants/json_constant.dart';
+
 class Bill {
   final String? id;
   final String merchant;
@@ -18,21 +20,21 @@ class Bill {
   });
 
   factory Bill.fromJson(Map<String, dynamic> json) => Bill(
-    id: json['_id'],
-    merchant: json['merchant'],
-    total: (json['total'] as num).toDouble(),
-    date: json['date'],
-    category: json['category'],
-    items: List<String>.from(json['items']),
-    imageUrl: json['imageUrl'],
+    id: json[billJsonId],
+    merchant: json[merchantJsonText],
+    total: (json[totalJsonText] as num).toDouble(),
+    date: json[dateJsonText],
+    category: json[categoryJsonText],
+    items: List<String>.from(json[itemsJsonText]),
+    imageUrl: json[imageUrlJsonText],
   );
 
   Map<String, dynamic> toJson() => {
-    "merchant": merchant,
-    "total": total,
-    "date": date,
-    "category": category,
-    "items": items,
-    "imageUrl": imageUrl,
+    merchantJsonText : merchant,
+    totalJsonText : total,
+    dateJsonText : date,
+    categoryJsonText : category,
+    itemsJsonText : items,
+    imageUrlJsonText : imageUrl,
   };
 }

@@ -1,5 +1,3 @@
-
-
 import 'package:scanner/core/services/bill_api_service.dart';
 import 'package:scanner/features/bills/models/bill_model.dart';
 

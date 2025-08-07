@@ -1,7 +1,7 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:scanner/core/constants/colors.dart';
+import 'package:scanner/core/constants/sizes.dart';
 import 'package:scanner/core/widgets/Loader/loader_Widget.dart';
 
 class ReceiptDetailLoaderScreen extends StatelessWidget{
@@ -17,22 +17,22 @@ class ReceiptDetailLoaderScreen extends StatelessWidget{
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           LoaderWidget(loaderWidth: screenWidth, loaderHeight: screenWidth, radius:0),
-          SizedBox(height: 20),
+          SizedBox(height: AppSizes.verticalPadding),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+                margin: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding,),
+                padding: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding,vertical: AppSizes.verticalPadding),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.cardBackgroundColor,
+                  borderRadius: BorderRadius.circular(AppSizes.radius),
                   boxShadow: [
                     BoxShadow(
                       blurStyle: BlurStyle.outer,
-                      color: Colors.grey.withOpacity(0.3),
-                      blurRadius: 7,
+                      color: AppColors.boxShadowColor,
+                      blurRadius: AppSizes.shadowBlurRadius,
                     ),
                   ],
                 ),
@@ -40,50 +40,51 @@ class ReceiptDetailLoaderScreen extends StatelessWidget{
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 20),
-                    LoaderWidget(loaderWidth: 175, loaderHeight: 20, radius: 10),
-                    SizedBox(height: 20),
+                    SizedBox(height: AppSizes.verticalPadding),
+                    LoaderWidget(loaderWidth: AppSizes.loaderTitleTextWidth, loaderHeight: AppSizes.loaderTitleTextSize, radius: AppSizes.loaderTextRadius),
+                    SizedBox(height: AppSizes.verticalPadding),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),
-                        LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),
+                        LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),
+                        LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: AppSizes.verticalPadding),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),
-                        LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),
+                        LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),
+                        LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: AppSizes.verticalPadding),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),
-                        LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),
+                        LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),
+                        LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: AppSizes.verticalPadding),
                   ],
                 ),
               ),
+              SizedBox(height: AppSizes.verticalPadding),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+                margin: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding,),
+                padding: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding,vertical: AppSizes.verticalPadding),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.cardBackgroundColor,
+                  borderRadius: BorderRadius.circular(AppSizes.radius),
                   boxShadow: [
                     BoxShadow(
                       blurStyle: BlurStyle.outer,
-                      color: Colors.grey.withOpacity(0.3),
-                      blurRadius: 7,
+                      color: AppColors.boxShadowColor,
+                      blurRadius: AppSizes.shadowBlurRadius,
                     ),
                   ],
                 ),
@@ -91,35 +92,35 @@ class ReceiptDetailLoaderScreen extends StatelessWidget{
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 20),
+                    SizedBox(height: AppSizes.verticalPadding),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        LoaderWidget(loaderWidth: 175, loaderHeight: 20, radius: 10),
-                        LoaderWidget(loaderWidth: 50, loaderHeight: 16, radius: 10),
+                        LoaderWidget(loaderWidth: AppSizes.loaderTitleTextWidth, loaderHeight: AppSizes.loaderTitleTextSize, radius: AppSizes.loaderTextRadius),
+                        LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: AppSizes.verticalPadding),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),
-                        LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),
+                        LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),
+                        LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),
                       ],
                     ),
-                    SizedBox(height: 20),
-                    LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),
-                    SizedBox(height: 10),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 16),child: LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),),
-                    SizedBox(height: 10),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 16),child: LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),),
-                    SizedBox(height: 10),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 16),child: LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),),
-                    SizedBox(height: 10),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 16),child: LoaderWidget(loaderWidth: 100, loaderHeight: 16, radius: 10),),
-                    SizedBox(height: 20),
+                    SizedBox(height: AppSizes.verticalPadding),
+                    LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),
+                    SizedBox(height: AppSizes.verticalPadding),
+                    Padding(padding: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding,),child: LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),),
+                    SizedBox(height: AppSizes.verticalPadding),
+                    Padding(padding: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding,),child: LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),),
+                    SizedBox(height: AppSizes.verticalPadding),
+                    Padding(padding: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding,),child: LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),),
+                    SizedBox(height: AppSizes.verticalPadding),
+                    Padding(padding: EdgeInsets.symmetric(horizontal: AppSizes.horizontalPadding,),child: LoaderWidget(loaderWidth: AppSizes.loaderContentTextWidth, loaderHeight: AppSizes.loaderContentTextSize, radius: AppSizes.loaderTextRadius),),
+                    SizedBox(height: AppSizes.verticalPadding),
                   ],
                 ),
               ),
