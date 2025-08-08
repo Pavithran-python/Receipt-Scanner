@@ -15,8 +15,10 @@ class AppTheme {
       titleTextStyle: TextStyle(color: AppColors.appBarTextColor,fontSize: AppSizes.appBarTextSize,fontWeight: FontWeight.bold),
     ),
     textTheme: TextTheme(
+      displayLarge: TextStyle(color: AppColors.error,fontSize:  AppSizes.displayLargeTextSize,fontWeight: FontWeight.bold),
+      displaySmall: TextStyle(color: AppColors.buttonTextColor,fontSize: AppSizes.displaySmallTextSize,fontWeight: FontWeight.w600),
       bodyLarge: TextStyle(color: AppColors.text,fontSize: AppSizes.bodyLargeTextSize,fontWeight: FontWeight.w600),
-      bodyMedium: TextStyle(color: AppColors.text,fontSize: AppSizes.bodyMediumTextSize,),
+      bodyMedium: TextStyle(color: AppColors.text,fontSize: AppSizes.bodyMediumTextSize,fontWeight: FontWeight.w400),
       bodySmall: TextStyle(color: AppColors.text,fontSize: AppSizes.bodySmallTextSize,),
     ),
     primarySwatch: AppColors.primary, // or your custom swatch
@@ -44,9 +46,11 @@ class AppTheme {
       ),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
+      sizeConstraints: BoxConstraints.tightFor(width: AppSizes.floatingButtonSize, height: AppSizes.floatingButtonSize),
       backgroundColor: AppColors.primary,
       foregroundColor: AppColors.buttonTextColor,
       focusElevation: AppSizes.appBarElevation,
+      iconSize: AppSizes.floatingActionButtonIconSize,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSizes.floatingButtonSize),
       ),

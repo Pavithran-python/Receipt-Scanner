@@ -8,6 +8,7 @@ import 'package:scanner/core/constants/json_constant.dart';
 import 'package:scanner/core/constants/sizes.dart';
 import 'package:scanner/core/utils/compress_image.dart';
 import 'package:scanner/core/widgets/circular_progress_indicator_widget.dart';
+import 'package:scanner/core/widgets/message_box.dart';
 import 'package:scanner/features/bills/bloc/bill_detail_bloc.dart';
 import 'package:scanner/features/bills/bloc/bill_detail_event.dart';
 import 'package:scanner/features/bills/bloc/bill_detail_state.dart';
@@ -40,8 +41,6 @@ class PreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.pageBackground,
       appBar: AppBar(title: Text(previewAppBarText)),
@@ -55,10 +54,10 @@ class PreviewScreen extends StatelessWidget {
             navigateToEditReceiptScreen(getContext: context, getReceiptItem: getReceiptItem,);
           }
           if (state is BillDetailError) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)),);
+            MessageBox(context: context, getMessage: state.message);
           }
         },
-        child: Container(width: screenWidth,height: screenHeight,child: Image.file(File(imagePath), fit: BoxFit.fill,),),
+        child: Container(width: double.infinity,height: double.infinity,child:Image.file(File(imagePath), fit: BoxFit.fill,),)
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

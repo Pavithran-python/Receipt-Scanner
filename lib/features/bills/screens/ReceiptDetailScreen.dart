@@ -6,6 +6,8 @@ import 'package:scanner/core/constants/sizes.dart';
 import 'package:scanner/core/utils/date_format_change.dart';
 import 'package:scanner/core/widgets/Loader/receipt_detail_loader_screen.dart';
 import 'package:scanner/core/widgets/circular_progress_indicator_widget.dart';
+import 'package:scanner/core/widgets/empty_message_screen.dart';
+import 'package:scanner/core/widgets/message_box.dart';
 import 'package:scanner/core/widgets/secure_image.dart';
 import 'package:scanner/features/bill_list/bloc/bill_list_bloc.dart';
 import 'package:scanner/features/bill_list/bloc/bill_list_event.dart';
@@ -63,9 +65,9 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
             final res = state.deleteResponse;
             String getMessage = res[message] ?? receiptDeletedSuccessfully;
             Navigator.pop(context, delete);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(getMessage)),);
+            MessageBox(context: context, getMessage: getMessage);
           } else if (state is BillDetailError) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)),);
+            MessageBox(context: context, getMessage: state.message);
           }
         },
         builder: (context, state) {
@@ -102,12 +104,12 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(productDetailText, style:TextStyle(fontWeight:FontWeight.bold),),
+                            Text(productDetailText, style:Theme.of(context).textTheme.bodyLarge,),
                             SizedBox(height: AppSizes.verticalPadding),
                             _buildInfoRow(merchantText, bill.merchant),
-                            SizedBox(height: AppSizes.verticalPadding),
+                            SizedBox(height: (AppSizes.verticalPadding/2)),
                             _buildInfoRow(categoryText, bill.category),
-                            SizedBox(height: AppSizes.verticalPadding),
+                            SizedBox(height: (AppSizes.verticalPadding/2)),
                             _buildInfoRow(dateText, DateFormatChange().formatReadableDate(inputDate: bill.date)),
                           ],
                         ),
@@ -128,20 +130,20 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(priceDetailText,style: TextStyle(fontWeight:FontWeight.bold),),
-                                InkWell(onTap: (){navigateToEditReceiptScreen(getContext: context, getReceiptItem: bill,);},child: Icon(Icons.edit)),
+                                Text(priceDetailText,style: Theme.of(context).textTheme.bodyLarge,),
+                                InkWell(onTap: (){navigateToEditReceiptScreen(getContext: context, getReceiptItem: bill,);},child: Icon(Icons.edit,size: AppSizes.editIconSize,)),
                               ],
                             ),
                             SizedBox(height: AppSizes.verticalPadding),
                             _buildInfoRow(priceText, "$currency${bill.total}"),
-                            bill.items.isEmpty?SizedBox():SizedBox(height: AppSizes.verticalPadding),
-                            bill.items.isEmpty?SizedBox():Text(itemsText, style: TextStyle(fontWeight: FontWeight.w500)),
-                            bill.items.isEmpty?SizedBox():SizedBox(height: AppSizes.verticalPadding),
+                            bill.items.isEmpty?SizedBox():SizedBox(height: (AppSizes.verticalPadding/2)),
+                            bill.items.isEmpty?SizedBox():Text(itemsText, style: Theme.of(context).textTheme.bodyMedium),
+                            bill.items.isEmpty?SizedBox():SizedBox(height: (AppSizes.verticalPadding/2)),
                             for (var item in bill.items)
                               Row(
                                 children: [
-                                  Text(bullet, style: TextStyle(fontSize: AppSizes.bulletFontSize)),
-                                  Expanded(child: Text(item, style: TextStyle(fontWeight: FontWeight.bold)))
+                                  Text(bullet, style: Theme.of(context).textTheme.bodyMedium),
+                                  Expanded(child: Text(item, style: Theme.of(context).textTheme.bodyLarge))
                                 ],
                               ),
                           ],
@@ -153,7 +155,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
               ),
             );
           }
-          return Center(child:Text(somethingWentWrong));
+          return EmptyMessageScreen(emptyMessage: somethingWentWrong);
         },
       ),
       bottomNavigationBar: Container(
@@ -165,12 +167,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(cancelButtonText),
-              ),
-            ),
+            Expanded(child: OutlinedButton(onPressed: () => Navigator.pop(context), child: Text(cancelButtonText),),),
             SizedBox(width: AppSizes.horizontalPadding),
             Expanded(
               child: BlocBuilder<BillDetailBloc, BillDetailState>(
@@ -197,11 +194,9 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
+        Text(label, style: Theme.of(context).textTheme.bodyMedium),
         SizedBox(width: AppSizes.horizontalPadding),
-        Flexible(
-          child: Text(value, style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
+        Flexible(child: Text(value, style: Theme.of(context).textTheme.bodyLarge),),
       ],
     );
   }

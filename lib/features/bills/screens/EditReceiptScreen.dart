@@ -6,6 +6,7 @@ import 'package:scanner/core/constants/json_constant.dart';
 import 'package:scanner/core/constants/sizes.dart';
 import 'package:scanner/core/utils/check_condition.dart';
 import 'package:scanner/core/widgets/circular_progress_indicator_widget.dart';
+import 'package:scanner/core/widgets/message_box.dart';
 import 'package:scanner/features/bill_list/bloc/bill_list_bloc.dart';
 import 'package:scanner/features/bill_list/bloc/bill_list_event.dart';
 import 'package:scanner/features/bills/bloc/bill_detail_bloc.dart';
@@ -68,16 +69,15 @@ class _EditReceiptScreenState extends State<EditReceiptScreen> {
             Bill getNewBill = state.bill;
             if(widget.isUpdate){
               context.read<BillListBloc>().add(UpdateBillToListEvent(getNewBill));
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(receiptUpdate)),);
             }
             else{
               context.read<BillListBloc>().add(AddBillToListEvent(getNewBill));
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(receiptCreate)),);
             }
+            MessageBox(context: context, getMessage:widget.isUpdate?receiptUpdate:receiptCreate);
             Navigator.pop(context,widget.isUpdate);
           }
           if (state is BillDetailError) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)),);
+            MessageBox(context: context, getMessage: state.message);
           }
         },
         child: Container(

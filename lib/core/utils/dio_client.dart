@@ -6,8 +6,8 @@ class DioClient {
   static final Dio dio = Dio(
     BaseOptions(
       baseUrl: apiBaseUrl,
-      connectTimeout: const Duration(seconds: AppSizes.callingTimeoutSecond),
-      receiveTimeout: const Duration(seconds: AppSizes.callingTimeoutSecond),
+      connectTimeout:  Duration(seconds: AppSizes.callingTimeoutSecond),
+      receiveTimeout:  Duration(seconds: AppSizes.callingTimeoutSecond),
       headers: {'Content-Type': 'application/json'},
     ),
   );

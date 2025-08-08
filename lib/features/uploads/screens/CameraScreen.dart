@@ -4,6 +4,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:scanner/core/constants/colors.dart';
 import 'package:scanner/core/constants/constant.dart';
 import 'package:scanner/core/widgets/Loader/loader_Widget.dart';
+import 'package:scanner/core/widgets/empty_message_screen.dart';
+import 'package:scanner/core/widgets/message_box.dart';
 import 'PreviewScreen.dart';
 
 class CameraScreen extends StatelessWidget {
@@ -29,7 +31,7 @@ class CameraScreen extends StatelessWidget {
       await controller.initialize();
       return controller;
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(cameraPermissionDenied)),);
+      MessageBox(context: context, getMessage: cameraPermissionDenied);
       Navigator.pop(context);
       return null;
     }
@@ -44,11 +46,19 @@ class CameraScreen extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Scaffold(
+            backgroundColor: AppColors.pageBackground,
             appBar: AppBar(title: Text(cameraAppBarText)),
             body: LoaderWidget(loaderWidth: screenWidth, loaderHeight: screenHeight, radius: 0),
           );
         }
-        final controller = snapshot.data as CameraController;
+        if (!snapshot.hasData || snapshot.data == null) {
+          return Scaffold(
+            backgroundColor: AppColors.pageBackground,
+            appBar: AppBar(title: Text(cameraAppBarText)),
+            body: EmptyMessageScreen(emptyMessage: cameraPermissionDenied),
+          );
+        }
+        CameraController controller = snapshot.data as CameraController;
         return Scaffold(
           backgroundColor: AppColors.pageBackground,
           appBar: AppBar(title: Text(cameraAppBarText)),
@@ -62,6 +72,4 @@ class CameraScreen extends StatelessWidget {
       },
     );
   }
-
-
 }

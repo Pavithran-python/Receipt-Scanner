@@ -29,7 +29,7 @@ class ExpandableFabBlocScreen extends StatelessWidget {
                   },
                   child: const Icon(Icons.photo_library),
                 ),
-                SizedBox(height: AppSizes.verticalPadding+AppSizes.verticalPadding,),
+                SizedBox(height: (AppSizes.verticalPadding/2),),
                 FloatingActionButton(
                   heroTag: cameraText,
                   onPressed: () {
@@ -38,7 +38,7 @@ class ExpandableFabBlocScreen extends StatelessWidget {
                   },
                   child: const Icon(Icons.camera_alt),
                 ),
-                SizedBox(height: AppSizes.verticalPadding+AppSizes.verticalPadding,),
+                SizedBox(height: (AppSizes.verticalPadding/2),),
               ],
               FloatingActionButton(
                 heroTag: mainAddText,
@@ -46,7 +46,7 @@ class ExpandableFabBlocScreen extends StatelessWidget {
                   context.read<FabBloc>().add(ToggleFab());
                 },
                 child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: AppSizes.animationSeconds),
+                  duration: Duration(milliseconds: AppSizes.animationSeconds),
                   child: Icon(
                     isExpanded ? Icons.close : Icons.add,
                     key: ValueKey<bool>(isExpanded),

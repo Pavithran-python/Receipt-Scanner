@@ -36,16 +36,16 @@ class ReceiptListview extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(getReceiptItem.merchant,style: TextStyle(fontWeight: FontWeight.bold,),softWrap: true,),
-            SizedBox(height: (AppSizes.verticalPadding/2),),
-            Text(getReceiptItem.category,style: TextStyle(fontWeight: FontWeight.w500),softWrap: true,),
-            SizedBox(height: (AppSizes.verticalPadding/2),),
+            Text(getReceiptItem.merchant,style: Theme.of(context).textTheme.bodyLarge,softWrap: true,),
+            SizedBox(height: (AppSizes.verticalPadding/4),),
+            Text(getReceiptItem.category,style: Theme.of(context).textTheme.bodyMedium,softWrap: true,),
+            SizedBox(height: (AppSizes.verticalPadding/4),),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(DateFormatChange().formatReadableDate(inputDate: getReceiptItem.date),style: TextStyle(fontWeight: FontWeight.w500),softWrap: true,),
-                Text("$currency ${getReceiptItem.total}",style: TextStyle(fontWeight: FontWeight.w600),softWrap: true,),
+                Text(DateFormatChange().formatReadableDate(inputDate: getReceiptItem.date),style: Theme.of(context).textTheme.bodyMedium,softWrap: true,),
+                Text("$currency${getReceiptItem.total}",style: Theme.of(context).textTheme.bodyLarge,softWrap: true,),
               ],
             ),
           ],

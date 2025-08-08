@@ -5,6 +5,8 @@ import 'package:scanner/core/constants/colors.dart';
 import 'package:scanner/core/constants/constant.dart';
 import 'package:scanner/core/utils/check_condition.dart';
 import 'package:scanner/core/widgets/Loader/dashboard_loader_screen.dart';
+import 'package:scanner/core/widgets/empty_message_screen.dart';
+import 'package:scanner/core/widgets/message_box.dart';
 import 'package:scanner/features/bill_list/bloc/bill_list_bloc.dart';
 import 'package:scanner/features/bill_list/bloc/bill_list_state.dart';
 import 'package:scanner/features/bills/widgets/ReceiptListview.dart';
@@ -38,11 +40,11 @@ class DashboardScreen extends StatelessWidget {
         navigateToPreviewScreen(getContext: context, image: image);
       }
       else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(noImageSelected)),);
+        MessageBox(context: context, getMessage: noImageSelected);
       }
     }
     else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(photoDenied)),);
+      MessageBox(context: context, getMessage: photoDenied);
     }
   }
 
@@ -58,7 +60,7 @@ class DashboardScreen extends StatelessWidget {
           } else if (state is BillListLoaded) {
             final bills = state.bills;
             if (bills.isEmpty) {
-              return Center(child: Text(noReceiptFound));
+              return EmptyMessageScreen(emptyMessage: noReceiptFound);
             }
             return ListView.builder(
               itemCount: state.bills.length,
@@ -67,7 +69,7 @@ class DashboardScreen extends StatelessWidget {
                 return ReceiptListview(getReceiptItem: receipt);},
             );
           }
-          return Center(child: Text(somethingWentWrong));
+          return EmptyMessageScreen(emptyMessage: somethingWentWrong);
         },
       ),
       floatingActionButton: ExpandableFabBlocScreen(
