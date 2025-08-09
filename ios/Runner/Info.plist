@@ -5,7 +5,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>Scanner</string>
+		<string>Receipt Scanner</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
@@ -30,9 +30,13 @@
 			<true/>
 		</dict>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>This app needs access to your photo library</string>
+        <string>We need access to your photos to upload and share images.</string>
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>We need to save images to your library.</string>
 		<key>NSCameraUsageDescription</key>
 		<string>This application needs to access your camera</string>
+        <key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+        <true/>
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
